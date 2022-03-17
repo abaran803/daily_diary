@@ -1,7 +1,6 @@
-import {Alert, Button, Container, Form} from "react-bootstrap";
+import {Button, Container, Form} from "react-bootstrap";
 import {useFormik} from "formik";
 import {addPost} from "../api/Api";
-import {useState} from "react";
 
 const CustomForm = props => {
 
@@ -11,10 +10,15 @@ const CustomForm = props => {
             description: ''
         },
         onSubmit: values => {
-            addPost(values);
+            addPost({'title': formik.values.title, 'description': formik.values.description}, (data) => {
+                console.log('Data:', data);
+                if(data) {
+                    props.handleAddition('success');
+                } else {
+                    props.handleAddition('danger');
+                }
+            })
             formik.resetForm();
-            props.setShowAlert(true);
-            props.setAlertType('error');
         },
     });
 
